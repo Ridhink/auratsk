@@ -3,12 +3,13 @@
 import { useEffect, useState, useMemo, useCallback } from "react";
 import { fetchTasks, updateTaskAction, fetchMembers } from "@/lib/db/actions";
 import type { Task } from "@/lib/db/schema";
-import AIChatBox from "@/components/ai/AIChatBox";
+import AIChatFAB from "@/components/ai/AIChatFAB";
 import TaskFilters, { type FilterState } from "@/components/tasks/TaskFilters";
 import TaskCard from "@/components/tasks/TaskCard";
 import TaskDetailModal from "@/components/tasks/TaskDetailModal";
 import QuickAddTask from "@/components/tasks/QuickAddTask";
 import EmptyState from "@/components/ui/EmptyState";
+import { KanbanColumnSkeleton, TaskCardSkeleton } from "@/components/ui/Skeleton";
 import { useKeyboardShortcuts } from "@/components/ui/KeyboardShortcuts";
 import { useNotification } from "@/components/ui/useNotification";
 import Notification from "@/components/ui/Notification";
@@ -25,9 +26,9 @@ const STATUS_LABELS: Record<TaskStatus, string> = {
 
 const STATUS_COLORS: Record<TaskStatus, string> = {
   TO_DO: "border-gray-500 bg-gray-800/50",
-  IN_PROGRESS: "border-purple-500 bg-purple-900/20",
-  DONE: "border-teal-500 bg-teal-900/20",
-  BLOCKED: "border-red-500 bg-red-900/20",
+  IN_PROGRESS: "border-purple-700/50 bg-purple-900/30",
+  DONE: "border-teal-700/50 bg-teal-900/30",
+  BLOCKED: "border-red-800/50 bg-red-900/30",
 };
 
 export default function DashboardPage() {
@@ -226,10 +227,22 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="container mx-auto px-4 py-8 flex items-center justify-center min-h-[60vh] animate-fade-in">
-        <div className="flex flex-col items-center gap-4 animate-bounce-in">
-          <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
-          <div className="text-white animate-pulse">Loading tasks...</div>
+      <div className="container mx-auto px-3 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8 animate-fade-in max-w-7xl">
+        <div className="mb-4 sm:mb-6">
+          <div className="flex items-center justify-between mb-3 sm:mb-4">
+            <div className="space-y-2">
+              <div className="h-7 sm:h-8 w-48 bg-gray-800 rounded-lg animate-pulse"></div>
+              <div className="h-4 w-32 bg-gray-800 rounded animate-pulse"></div>
+            </div>
+          </div>
+          <div className="bg-gray-900/50 border border-purple-500/20 rounded-lg p-3 sm:p-4">
+            <div className="h-10 bg-gray-800 rounded-lg animate-pulse"></div>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4">
+          {[1, 2, 3, 4].map((i) => (
+            <KanbanColumnSkeleton key={i} />
+          ))}
         </div>
       </div>
     );
@@ -237,25 +250,37 @@ export default function DashboardPage() {
 
   if (error) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="bg-red-900/20 border border-red-500/30 rounded-lg p-4 text-red-400">
-          <p>Error: {error}</p>
-          <button
-            onClick={loadData}
-            className="mt-2 px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg text-white text-sm"
-          >
-            Retry
-          </button>
+      <div className="container mx-auto px-3 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8 animate-fade-in max-w-7xl">
+        <div className="max-w-2xl mx-auto">
+          <div className="bg-red-900/20 border border-red-500/30 rounded-xl p-6 sm:p-8 text-center animate-fade-in-scale">
+            <div className="text-5xl mb-4">⚠️</div>
+            <h3 className="text-xl sm:text-2xl font-semibold text-gray-200 mb-2">Something went wrong</h3>
+            <p className="text-red-300 mb-6 text-sm sm:text-base">{error}</p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <button
+                onClick={loadData}
+                className="px-6 py-3 bg-red-900 hover:bg-red-950 rounded-lg text-gray-200 font-medium transition-all duration-200 hover:shadow-lg hover:shadow-red-900/10 hover:-translate-y-0.5 active:translate-y-0 min-h-[44px]"
+              >
+                Try Again
+              </button>
+              <button
+                onClick={() => window.location.reload()}
+                className="px-6 py-3 bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg text-gray-300 font-medium transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 min-h-[44px]"
+              >
+                Refresh Page
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-8 animate-fade-in">
+    <div className="container mx-auto px-3 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8 animate-fade-in max-w-7xl">
       {/* Notification */}
       {notification && (
-        <div className="mb-4 animate-slide-down">
+        <div className="mb-3 sm:mb-4 animate-slide-down">
           <Notification
             message={notification.message}
             type={notification.type}
@@ -265,10 +290,10 @@ export default function DashboardPage() {
       )}
 
       {/* Header with Filters */}
-      <div className="mb-4 sm:mb-6">
-        <div className="flex items-center justify-between mb-3 sm:mb-4">
+      <div className="mb-4 sm:mb-5 lg:mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4 mb-3 sm:mb-4">
           <div>
-            <h2 className="text-xl sm:text-2xl font-semibold text-white">Task Board</h2>
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-200">Task Board</h2>
             <p className="text-xs sm:text-sm text-gray-400 mt-1">
               {totalTasks} {totalTasks === 1 ? "task" : "tasks"} total
             </p>
@@ -277,11 +302,11 @@ export default function DashboardPage() {
         <TaskFilters onFilterChange={handleFilterChange} members={members} />
       </div>
 
-      <div className={`grid grid-cols-1 ${currentUser && (currentUser.role === 'ADMIN' || currentUser.role === 'OWNER' || currentUser.role === 'MANAGER') ? 'lg:grid-cols-3' : 'lg:grid-cols-1'} gap-4 lg:gap-8`}>
+      <div className="w-full">
         {/* Kanban Board */}
-        <div className={currentUser && (currentUser.role === 'ADMIN' || currentUser.role === 'OWNER' || currentUser.role === 'MANAGER') ? "lg:col-span-2 order-2 lg:order-1" : "order-1"}>
+        <div className="w-full">
           {hasTasks ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 overflow-x-auto pb-4 lg:pb-0">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4 overflow-x-auto pb-4 lg:pb-0 -mx-3 sm:mx-0 px-3 sm:px-0">
               {STATUSES.map((status, index) => {
                 const statusTasks = getTasksByStatus(status);
                 return (
@@ -292,12 +317,19 @@ export default function DashboardPage() {
                     onDragOver={handleDragOver}
                     onDrop={() => handleDrop(status)}
                   >
-                    <div className={`p-2 sm:p-3 rounded-t-lg border ${STATUS_COLORS[status]}`}>
-                      <h3 className="font-semibold text-xs sm:text-sm text-white truncate">
-                        {STATUS_LABELS[status]} ({statusTasks.length})
+                    <div className={`p-2.5 sm:p-3 lg:p-4 rounded-t-lg border ${STATUS_COLORS[status]} flex items-center justify-between`}>
+                      <h3 className="font-semibold text-xs sm:text-sm lg:text-base text-gray-200 truncate flex items-center gap-2">
+                        {status === 'TO_DO' && ' 📋'}
+                        {status === 'IN_PROGRESS' && ' ⚙️'}
+                        {status === 'DONE' && ' ✅'}
+                        {status === 'BLOCKED' && ' 🚫'}
+                        {STATUS_LABELS[status]}
                       </h3>
+                      <span className="text-xs sm:text-sm font-bold text-gray-200 bg-black/20 px-2 py-0.5 rounded-full">
+                        {statusTasks.length}
+                      </span>
                     </div>
-                    <div className="flex-1 min-h-[300px] sm:min-h-[400px] p-2 bg-gray-900/50 border-x border-b border-purple-500/20 rounded-b-lg space-y-2 overflow-y-auto max-h-[600px] transition-all duration-300">
+                    <div className="flex-1 min-h-[250px] sm:min-h-[350px] lg:min-h-[450px] p-2 sm:p-3 bg-gray-900/50 border-x border-b border-purple-500/20 rounded-b-lg space-y-2 sm:space-y-3 overflow-y-auto max-h-[500px] sm:max-h-[600px] lg:max-h-[700px] transition-all duration-300">
                       {statusTasks.map((task, taskIndex) => (
                         <div
                           key={task.id}
@@ -331,21 +363,50 @@ export default function DashboardPage() {
               description={
                 currentUser && (currentUser.role === 'ADMIN' || currentUser.role === 'OWNER' || currentUser.role === 'MANAGER')
                   ? "Get started by creating your first task using the AI assistant or the quick add button."
-                  : "No tasks assigned to you yet."
+                  : "No tasks assigned to you yet. Check back later or contact your manager."
+              }
+              action={
+                currentUser && (currentUser.role === 'ADMIN' || currentUser.role === 'OWNER' || currentUser.role === 'MANAGER')
+                  ? {
+                      label: "Create Task",
+                      onClick: () => {
+                        const fab = document.querySelector('button[aria-label="Add new task"]') as HTMLButtonElement;
+                        fab?.click();
+                      },
+                      icon: (
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                        </svg>
+                      ),
+                    }
+                  : undefined
+              }
+              secondaryAction={
+                currentUser && (currentUser.role === 'ADMIN' || currentUser.role === 'OWNER' || currentUser.role === 'MANAGER')
+                  ? {
+                      label: "Chat with AI",
+                      onClick: () => {
+                        const aiFab = document.querySelector('button[aria-label="Open AI Assistant"]') as HTMLButtonElement;
+                        aiFab?.click();
+                      },
+                      icon: (
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                        </svg>
+                      ),
+                    }
+                  : undefined
               }
             />
           )}
         </div>
 
-        {/* AI Chat Box - Only for Admin/Owner/Manager */}
-        {currentUser && (currentUser.role === 'ADMIN' || currentUser.role === 'OWNER' || currentUser.role === 'MANAGER') && (
-          <div className="lg:col-span-1 order-1 lg:order-2 animate-fade-in animate-slide-in-right" style={{ animationDelay: '100ms' }}>
-            <div className="sticky top-4 lg:top-8 h-auto lg:h-[calc(100vh-8rem)] max-h-[600px] lg:max-h-none">
-              <AIChatBox />
-            </div>
-          </div>
-        )}
       </div>
+
+      {/* AI Chat FAB - Only for Admin/Owner/Manager */}
+      {currentUser && (currentUser.role === 'ADMIN' || currentUser.role === 'OWNER' || currentUser.role === 'MANAGER') && (
+        <AIChatFAB />
+      )}
 
       {/* Quick Add Task - Only for Admin/Owner/Manager */}
       {currentUser && (currentUser.role === 'ADMIN' || currentUser.role === 'OWNER' || currentUser.role === 'MANAGER') && (

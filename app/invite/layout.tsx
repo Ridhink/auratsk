@@ -7,9 +7,10 @@ export default function InviteLayout({
 }) {
   return (
     <div className="min-h-screen bg-gray-950 dark:bg-[#171725] text-white">
-      {/* Header */}
-      <Header />
-      {children}
+      {/* Scrollable Content - No header for invite page */}
+      <div>
+        {children}
+      </div>
     </div>
   );
 }

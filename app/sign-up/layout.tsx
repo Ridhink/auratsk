@@ -7,9 +7,8 @@ export default function SignUpLayout({
 }) {
   return (
     <div className="min-h-screen bg-gray-950 dark:bg-[#171725] text-white">
-      {/* Header */}
-      <Header />
-      <div className="flex items-center justify-center min-h-[calc(100vh-80px)]">
+      {/* Scrollable Content - No header for sign-up page */}
+      <div className="flex items-center justify-center min-h-screen">
         {children}
       </div>
     </div>

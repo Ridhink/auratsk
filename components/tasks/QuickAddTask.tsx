@@ -57,7 +57,7 @@ export default function QuickAddTask({ members, onTaskCreated }: QuickAddTaskPro
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-r from-purple-600 to-teal-600 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 active:scale-100 flex items-center justify-center text-white z-40 animate-bounce-in hover:shadow-purple-500/50"
+        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-r from-purple-800 to-teal-800 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 active:scale-95 flex items-center justify-center text-gray-200 z-40 animate-bounce-in hover:shadow-purple-800/20 min-w-[56px] min-h-[56px]"
         aria-label="Add new task"
       >
         <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -87,12 +87,12 @@ export default function QuickAddTask({ members, onTaskCreated }: QuickAddTaskPro
       />
 
       {/* Modal */}
-      <div className="fixed bottom-0 left-0 right-0 sm:bottom-6 sm:right-6 sm:left-auto w-full sm:w-auto sm:max-w-md bg-gray-900 border-t sm:border border-purple-500/30 rounded-t-xl sm:rounded-xl shadow-2xl z-50 p-4 sm:p-6 max-h-[90vh] overflow-y-auto animate-slide-up sm:animate-fade-in-scale">
+      <div className="fixed bottom-0 left-0 right-0 sm:bottom-6 sm:right-6 sm:left-auto w-full sm:w-auto sm:max-w-md lg:max-w-lg bg-gray-900 border-t sm:border border-purple-800/20 rounded-t-xl sm:rounded-xl shadow-2xl z-50 p-4 sm:p-5 lg:p-6 max-h-[90vh] overflow-y-auto animate-slide-up sm:animate-fade-in-scale">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-xl font-semibold text-white">Quick Add Task</h3>
+          <h3 className="text-xl font-semibold text-gray-200">Quick Add Task</h3>
           <button
             onClick={() => setIsOpen(false)}
-            className="text-gray-400 hover:text-white transition-colors"
+            className="text-gray-400 hover:text-gray-200 transition-colors"
             aria-label="Close"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -122,7 +122,7 @@ export default function QuickAddTask({ members, onTaskCreated }: QuickAddTaskPro
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Task description..."
               rows={3}
-              className="w-full px-4 py-2 bg-gray-800 border border-purple-500/20 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 resize-none"
+              className="w-full px-4 py-2 bg-gray-800 border border-purple-800/15 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-800/30 resize-none"
             />
           </div>
 
@@ -132,7 +132,7 @@ export default function QuickAddTask({ members, onTaskCreated }: QuickAddTaskPro
               <select
                 value={assigneeId}
                 onChange={(e) => setAssigneeId(e.target.value)}
-                className="w-full px-4 py-2 bg-gray-800 border border-purple-500/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+                className="w-full px-4 py-2 bg-gray-800 border border-purple-800/15 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-800/30"
               >
                 <option value="">Unassigned</option>
                 {members.map((member) => (
@@ -148,7 +148,7 @@ export default function QuickAddTask({ members, onTaskCreated }: QuickAddTaskPro
               <select
                 value={priority}
                 onChange={(e) => setPriority(e.target.value as any)}
-                className="w-full px-4 py-2 bg-gray-800 border border-purple-500/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+                className="w-full px-4 py-2 bg-gray-800 border border-purple-800/15 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-800/30"
               >
                 <option value="LOW">Low</option>
                 <option value="MEDIUM">Medium</option>
@@ -180,7 +180,7 @@ export default function QuickAddTask({ members, onTaskCreated }: QuickAddTaskPro
             <button
               type="submit"
               disabled={isSubmitting || !title.trim()}
-              className="flex-1 px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-lg hover:bg-purple-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-purple-500/30 hover:-translate-y-0.5 active:translate-y-0"
+              className="flex-1 px-4 py-2 text-sm font-medium text-gray-200 bg-purple-800 rounded-lg hover:bg-purple-900 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-purple-800/10 hover:-translate-y-0.5 active:translate-y-0"
             >
               {isSubmitting ? "Creating..." : "Create Task"}
             </button>

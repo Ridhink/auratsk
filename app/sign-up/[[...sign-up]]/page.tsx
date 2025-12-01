@@ -11,10 +11,10 @@ export default function SignUpPage() {
             headerTitle: "text-white",
             headerSubtitle: "text-gray-400",
             socialButtonsBlockButton: "bg-gray-800 border-purple-500/20 text-white hover:bg-gray-700",
-            formButtonPrimary: "bg-purple-600 hover:bg-purple-700",
+            formButtonPrimary: "bg-purple-700 hover:bg-purple-800",
             formFieldInput: "bg-gray-800 border-purple-500/20 text-white",
             formFieldLabel: "text-gray-300",
-            footerActionLink: "text-purple-400 hover:text-purple-300",
+            footerActionLink: "text-purple-500 hover:text-purple-400",
           },
         }}
       />
